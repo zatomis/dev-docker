@@ -1,0 +1,14 @@
+FROM python:3.10.14-slim-bookworm
+LABEL author=Max
+ARG JINJA_VER="0.1.1"
+RUN apt-get update
+RUN apt-get install wget -y
+RUN apt-get install zip -y
+WORKDIR /"jinja"_$JINJA_VER
+RUN wget https://github.com/MrDave/StaticJinjaPlus/archive/refs/tags/$JINJA_VER.zip
+RUN unzip $JINJA_VER.zip
+RUN rm $JINJA_VER.zip
+WORKDIR /"jinja"_$JINJA_VER/"StaticJinjaPlus-"$JINJA_VER
+RUN python3.10 -m venv venv
+RUN . venv/bin/activate && pip install -r requirements.txt
+RUN mv templates_example templates 
