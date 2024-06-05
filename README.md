@@ -41,17 +41,17 @@ RUN mv templates_example templates
 данный файл создает образы для 
 - 0.1.0-ubuntu
 - 0.1.1-ubuntu
+
 где в качестве параметрa JINJA_VER - № тега сборки 
+
 ```shell
 docker build -f dockerfile01 -t ubuntu_staticjinjaplus:v01 --build-arg JINJA_VER="0.1.0" .
 ```
+
 ```shell
 docker build -f dockerfile01 -t ubuntu_staticjinjaplus:v02 --build-arg JINJA_VER="0.1.1" .
 ```
 
-```shell
-touch dockerfile
-```
 Следующий файл применим для сборок
 - 0.1.0-slim
 - 0.1.1-slim
@@ -121,6 +121,21 @@ docker build -f dockerfile04 -t slim_staticjinjaplus:latest .
 ```
 
 - latest
+```
+FROM python:3.10
+LABEL author=Max
+RUN apt-get update
+RUN apt-get install git -y
+WORKDIR /"jinja"
+RUN git clone https://github.com/MrDave/StaticJinjaPlus.git
+WORKDIR /jinja/StaticJinjaPlus
+RUN python3.10 -m venv venv
+RUN . venv/bin/activate && pip install -r requirements.txt
+RUN mv templates_example templates 
+```
+```shell
+docker build -f dockerfile05 -t python_staticjinjaplus:latest .
+```
 
 
 ## Цели проекта
