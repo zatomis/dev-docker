@@ -2,17 +2,13 @@ FROM ubuntu:22.04
 LABEL author=Max
 ARG JINJA_VER="0.1.1"
 RUN apt-get update
-RUN apt-get install wget -y
-RUN apt-get install python3.10 -y
-RUN apt-get install zip -y
-RUN apt-get install python3-pip -y
-RUN apt install -y build-essential libssl-dev libffi-dev python3-dev
-RUN apt install -y python3-venv
-WORKDIR /"jinja"_$JINJA_VER
-RUN wget https://github.com/MrDave/StaticJinjaPlus/archive/refs/tags/$JINJA_VER.zip
-RUN unzip $JINJA_VER.zip
-RUN rm $JINJA_VER.zip
-WORKDIR /"jinja"_$JINJA_VER/"StaticJinjaPlus-"$JINJA_VER
+RUN apt update && apt install -y python3.10 python3-pip zip python3-venv
+WORKDIR /"jinja"
+ADD https://github.com/MrDave/StaticJinjaPlus/archive/refs/tags/$JINJA_VER.zip site_zip
+RUN unzip site_zip && rm site_zip
+RUN mv "StaticJinjaPlus-"$JINJA_VER StaticJinjaPlus 
+WORKDIR /jinja/StaticJinjaPlus
 RUN python3.10 -m venv venv
 RUN . venv/bin/activate && pip install -r requirements.txt
 RUN mv templates_example templates 
+ENTRYPOINT ["venv/bin/python3.10", "main.py"]
