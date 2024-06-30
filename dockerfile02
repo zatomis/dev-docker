@@ -1,13 +1,12 @@
 FROM python:3.10.14-slim-bookworm
 LABEL author=Max
 ARG JINJA_VER="0.1.1"
-RUN apt-get update && apt install -y zip
+ARG JINJA_LINK=https://github.com/MrDave/StaticJinjaPlus/archive/refs/tags/$JINJA_VER.tar.gz
 WORKDIR /jinja
-ADD https://github.com/MrDave/StaticJinjaPlus/archive/refs/tags/$JINJA_VER.zip site_zip
-RUN unzip site_zip && rm site_zip
+ADD $JINJA_LINK site
+RUN tar -xvf site && rm site
 RUN mv "StaticJinjaPlus-"$JINJA_VER StaticJinjaPlus 
 WORKDIR /jinja/StaticJinjaPlus
-RUN python3.10 -m venv venv
-RUN . venv/bin/activate && pip install -r requirements.txt
+RUN pip install -r requirements.txt
 RUN mv templates_example templates 
-ENTRYPOINT ["venv/bin/python3.10", "main.py"]
+ENTRYPOINT ["python3", "main.py"]
