@@ -22,16 +22,12 @@ touch dockerfile
 FROM ubuntu:22.04
 LABEL author=Max
 ARG JINJA_VER="0.1.1"
+ARG JINJA_HASH
 ARG JINJA_LINK=https://github.com/MrDave/StaticJinjaPlus/archive/refs/tags/$JINJA_VER.tar.gz
 RUN apt update && apt install -y curl python3.10 python3-pip && rm -rf /var/lib/apt/lists/*
 WORKDIR /"jinja"
-ADD $JINJA_LINK site
-RUN online_md5="$(curl -sL $JINJA_LINK | md5sum | cut -d ' ' -f 1)" && echo $online_md5
-RUN local_md5="$(md5sum "site" | cut -d ' ' -f 1)" && echo $local_md5
-RUN if [ "$online" = "$local_md5" ]; then echo "Файл $JINJA_LINK прошел проверку на подлинность !!!"; else exit 1; fi
-RUN tar -xvf site && rm site
-RUN mv "StaticJinjaPlus-"$JINJA_VER StaticJinjaPlus 
-WORKDIR /jinja/StaticJinjaPlus
+ADD --checksum=sha256:$JINJA_HASH $JINJA_LINK /tmp/app.tar.gz
+RUN tar xzf /tmp/app.tar.gz --strip-components=1 -C /jinja && rm /tmp/app.tar.gz
 RUN pip install -r requirements.txt
 RUN mv templates_example templates 
 ENTRYPOINT ["python3", "main.py"]
@@ -40,14 +36,11 @@ ENTRYPOINT ["python3", "main.py"]
 - 0.1.0-ubuntu
 - 0.1.1-ubuntu
 
-где в качестве параметрa JINJA_VER - № тега сборки 
+где в качестве параметров используем JINJA_VER - № тега сборки и JINJA_HASH - хеш файла sha256 (его нужно знать заранее), для проверки на подлинность 
+имя файла для сборки используйте стандартное Dockerfile, например 
 
 ```shell
-docker build -f dockerfile01 --progress=plain --no-cache -t ubuntu_staticjinjaplus:v1 --build-arg JINJA_VER="0.1.0" .
-```
-
-```shell
-docker build -f dockerfile01 --progress=plain --no-cache -t ubuntu_staticjinjaplus:v2 --build-arg JINJA_VER="0.1.1" .
+docker build -t ubuntu_staticjinjaplus:v1 --build-arg JINJA_VER="0.1.0" --build-arg JINJA_HASH="3555bcfd670e134e8360ad934cb5bad1bbe2a7dad24ba7cafa0a3bb8b23c6444" .
 ```
 
 Следующий файл применим для сборок
@@ -58,21 +51,19 @@ docker build -f dockerfile01 --progress=plain --no-cache -t ubuntu_staticjinjapl
 FROM python:3.10.14-slim-bookworm
 LABEL author=Max
 ARG JINJA_VER="0.1.1"
+ARG JINJA_HASH
+ARG JINJA_LINK=https://github.com/MrDave/StaticJinjaPlus/archive/refs/tags/$JINJA_VER.tar.gz
 WORKDIR /jinja
-ADD https://github.com/MrDave/StaticJinjaPlus/archive/refs/tags/$JINJA_VER.tar.gz site
-RUN tar -xvf site && rm site
-RUN mv "StaticJinjaPlus-"$JINJA_VER StaticJinjaPlus 
-WORKDIR /jinja/StaticJinjaPlus
+ADD --checksum=sha256:$JINJA_HASH $JINJA_LINK /tmp/app.tar.gz
+RUN tar xzf /tmp/app.tar.gz --strip-components=1 -C /jinja && rm /tmp/app.tar.gz
 RUN pip install -r requirements.txt
 RUN mv templates_example templates 
 ENTRYPOINT ["python3", "main.py"]
 ```
+
 где в качестве параметров - теги сборок 
 ```shell
-docker build -f dockerfile02 --progress=plain --no-cache -t slim_staticjinjaplus:v3 --build-arg JINJA_VER="0.1.0" .
-```
-```shell
-docker build -f dockerfile02 --progress=plain --no-cache -t slim_staticjinjaplus:v4 --build-arg JINJA_VER="0.1.1" .
+docker build -t slim_staticjinjaplus:v3 --build-arg JINJA_VER="0.1.0" --build-arg JINJA_HASH="3555bcfd670e134e8360ad934cb5bad1bbe2a7dad24ba7cafa0a3bb8b23c6444" .
 ```
 
 Для сборки последней актуальной версии используем скрипт :
@@ -131,7 +122,7 @@ docker build -f dockerfile05 --progress=plain --no-cache -t python_staticjinjapl
 # Запуск образа
 Воспользуйтесь командой ниже. `Запуск всех образов аналогичен, за исключение указания номера версии сборки образа`
 ```shell
-docker run -v "$(pwd)"/site:/jinja/StaticJinjaPlus/build --rm -it django:v [1,2,3]->указать номер версии образа
+docker run -v "$(pwd)"/site:/jinja/build --rm -it django:v [1,2,3]->указать номер версии образа
 ```
 После выполнения в текущем каталоге появится папка site с готовым шаблоном 
 
