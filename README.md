@@ -67,7 +67,7 @@ docker build -t slim_staticjinjaplus:v3 --build-arg JINJA_VER="0.1.0" --build-ar
 ```
 
 Для сборки последней актуальной версии используем скрипт :
-для - latest-ubuntu
+для - ubuntu
 ```
 FROM ubuntu:22.04
 LABEL author=Max
@@ -81,10 +81,10 @@ ENTRYPOINT ["python3", "main.py"]
 ```
 
 ```shell
-docker build -f dockerfile03 --progress=plain --no-cache -t ubuntu_staticjinjaplus:latest .
+docker build . --progress=plain --no-cache -t ubuntu_staticjinjaplus:latest .
 ```
 
-для - latest-slim
+для - python-slim
 ```
 FROM python:3.10.14-slim-bookworm
 LABEL author=Max
@@ -99,7 +99,7 @@ ENTRYPOINT ["python3", "main.py"]
 ```
 
 ```shell
-docker build -f dockerfile04 --progress=plain --no-cache -t slim_staticjinjaplus:latest .
+docker build . --progress=plain --no-cache -t slim_staticjinjaplus:latest .
 ```
 
 - latest
@@ -116,7 +116,7 @@ RUN mv templates_example templates
 ENTRYPOINT ["python3", "main.py"]
 ```
 ```shell
-docker build -f dockerfile05 --progress=plain --no-cache -t python_staticjinjaplus:latest .
+docker build . --progress=plain --no-cache -t python_staticjinjaplus:latest .
 ```
 
 # Запуск образа
