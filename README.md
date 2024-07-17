@@ -73,8 +73,7 @@ FROM ubuntu:22.04
 LABEL author=Max
 RUN apt-get update && apt install -y git python3.10 python3-pip python3-venv && rm -rf /var/lib/apt/lists/*
 WORKDIR /"jinja"
-RUN git clone https://github.com/MrDave/StaticJinjaPlus.git
-WORKDIR /jinja/StaticJinjaPlus
+ADD https://github.com/MrDave/StaticJinjaPlus.git .
 RUN pip install -r requirements.txt
 RUN mv templates_example templates 
 ENTRYPOINT ["python3", "main.py"]
@@ -88,11 +87,9 @@ docker build . --progress=plain --no-cache -t ubuntu_staticjinjaplus:latest .
 ```
 FROM python:3.10.14-slim-bookworm
 LABEL author=Max
-RUN apt-get update
-RUN apt-get install git -y && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install git -y && rm -rf /var/lib/apt/lists/*
 WORKDIR /"jinja"
-RUN git clone https://github.com/MrDave/StaticJinjaPlus.git
-WORKDIR /jinja/StaticJinjaPlus
+ADD https://github.com/MrDave/StaticJinjaPlus.git .
 RUN pip install -r requirements.txt
 RUN mv templates_example templates 
 ENTRYPOINT ["python3", "main.py"]
@@ -106,11 +103,9 @@ docker build . --progress=plain --no-cache -t slim_staticjinjaplus:latest .
 ```
 FROM python:3.10
 LABEL author=Max
-RUN apt-get update
-RUN apt-get install git -y && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install git -y && rm -rf /var/lib/apt/lists/*
 WORKDIR /"jinja"
-RUN git clone https://github.com/MrDave/StaticJinjaPlus.git
-WORKDIR /jinja/StaticJinjaPlus
+ADD https://github.com/MrDave/StaticJinjaPlus.git .
 RUN pip install -r requirements.txt
 RUN mv templates_example templates 
 ENTRYPOINT ["python3", "main.py"]
