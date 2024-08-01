@@ -1,6 +1,4 @@
 FROM python:3.10.14-slim-bookworm
-LABEL author=Max
-ARG JINJA_VER="0.1.1"
 ARG JINJA_HASH
 ARG JINJA_LINK=https://github.com/MrDave/StaticJinjaPlus/archive/refs/tags/$JINJA_VER.tar.gz
 WORKDIR /jinja

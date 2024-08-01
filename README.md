@@ -10,8 +10,8 @@ docker --version
 ```
 
 ### Образец готового образа доступен на [Docker hub](https://hub.docker.com/r/zatomis/static-jinja-plus).
-Так же вы можете сами собрать образы.
-7 вариантов установок различных установок
+Так же вы можете собрать свои образы.
+Вот несколько вариантов установок 
 
 Создайте докер файл
 ```shell
@@ -20,8 +20,6 @@ touch dockerfile
 с содержанием :
 ```
 FROM ubuntu:22.04
-LABEL author=Max
-ARG JINJA_VER="0.1.1"
 ARG JINJA_HASH
 ARG JINJA_LINK=https://github.com/MrDave/StaticJinjaPlus/archive/refs/tags/$JINJA_VER.tar.gz
 RUN apt-get update && apt-get install -y curl python3.10 python3-pip && rm -rf /var/lib/apt/lists/*
@@ -36,7 +34,7 @@ ENTRYPOINT ["python3", "main.py"]
 - 0.1.0-ubuntu
 - 0.1.1-ubuntu
 
-где в качестве параметров используем JINJA_VER - № тега сборки и JINJA_HASH - хеш файла sha256 (его нужно знать заранее), для проверки на подлинность 
+где в качестве параметров используем JINJA_VER - № тега сборки `JINJA_VER="0.1.0"` `JINJA_VER="0.1.1"` и JINJA_HASH - хеш файла sha256 (его нужно знать заранее), для проверки на подлинность 
 имя файла для сборки используйте стандартное Dockerfile, например 
 
 ```shell
@@ -49,8 +47,6 @@ docker build -t ubuntu_staticjinjaplus:v1 --build-arg JINJA_VER="0.1.0" --build-
 
 ```
 FROM python:3.10.14-slim-bookworm
-LABEL author=Max
-ARG JINJA_VER="0.1.1"
 ARG JINJA_HASH
 ARG JINJA_LINK=https://github.com/MrDave/StaticJinjaPlus/archive/refs/tags/$JINJA_VER.tar.gz
 WORKDIR /jinja
@@ -61,7 +57,7 @@ RUN mv templates_example templates
 ENTRYPOINT ["python3", "main.py"]
 ```
 
-где в качестве параметров - теги сборок 
+где в качестве параметров - теги сборок такие как `JINJA_VER="0.1.0"` `JINJA_VER="0.1.1"` 
 ```shell
 docker build -t slim_staticjinjaplus:v3 --build-arg JINJA_VER="0.1.0" --build-arg JINJA_HASH="3555bcfd670e134e8360ad934cb5bad1bbe2a7dad24ba7cafa0a3bb8b23c6444" .
 ```
@@ -99,17 +95,6 @@ ENTRYPOINT ["python3", "main.py"]
 docker build . --progress=plain --no-cache -t slim_staticjinjaplus:latest .
 ```
 
-- latest
-```
-FROM python:3.10
-LABEL author=Max
-RUN apt-get update && apt-get install git -y && rm -rf /var/lib/apt/lists/*
-WORKDIR /"jinja"
-ADD https://github.com/MrDave/StaticJinjaPlus.git .
-RUN pip install --no-cache-dir -r requirements.txt
-RUN mv templates_example templates 
-ENTRYPOINT ["python3", "main.py"]
-```
 ```shell
 docker build . --progress=plain --no-cache -t python_staticjinjaplus:latest .
 ```
