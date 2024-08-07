@@ -1,5 +1,6 @@
 FROM ubuntu:22.04
 ARG JINJA_HASH
+ARG JINJA_VER
 ARG JINJA_LINK=https://github.com/MrDave/StaticJinjaPlus/archive/refs/tags/$JINJA_VER.tar.gz
 RUN apt-get update && apt-get install -y curl python3.10 python3-pip && rm -rf /var/lib/apt/lists/*
 WORKDIR /"jinja"

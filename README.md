@@ -131,6 +131,31 @@ docker build -t <имя вашего пользователя>/<название
 docker push <имя вашего пользователя>/<название образа>:v1
 ```
 
+
+# Пример публикации образа на [Docker Hub](https://hub.docker.com/)
+Для примера возьмем за основу сборку образа `ubuntu` и создаем его уже с нашем именем на докер хаб
+```shell
+docker build -t `zatomis`/ubuntu_staticjinjaplus:v0.1.1 --build-arg JINJA_VER="0.1.1" --build-arg JINJA_HASH="30d9424df1eddb73912b0e2ad5375fa2c876c8e30906bec91952dfb75dcf220b" .
+```
+проверим
+```shell
+docker image ls
+```
+
+![img_2.png](img_2.png)
+Образ создан.
+
+Авторизируемся на DockerHub
+![img_1.png](img_1.png)
+
+И делаем push
+![img_3.png](img_3.png)
+
+Наш образ успешно размещен на докер хаб
+![img_4.png](img_4.png)
+![img_5.png](img_5.png)
+
+
 ## Цели проекта
 
 Код написан в учебных целях. Cайт [Devman](https://dvmn.org). 
