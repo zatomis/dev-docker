@@ -132,7 +132,7 @@ docker push <имя вашего пользователя>/<название о�
 ```
 
 
-# Пример публикации образа на [Docker Hub](https://hub.docker.com/)
+# Пример публикации образа на [Docker Hub](https://hub.docker.com/repositories/zatomis)
 Для примера возьмем за основу сборку образа `ubuntu` и создаем его уже с нашем именем на докер хаб
 ```shell
 docker build -t `zatomis`/ubuntu_staticjinjaplus:v0.1.1 --build-arg JINJA_VER="0.1.1" --build-arg JINJA_HASH="30d9424df1eddb73912b0e2ad5375fa2c876c8e30906bec91952dfb75dcf220b" .
@@ -155,6 +155,8 @@ docker image ls
 ![img_4.png](img_4.png)
 ![img_5.png](img_5.png)
 
+# Готовые образы на [Docker Hub](https://hub.docker.com/repositories/zatomis)
+![img.png](img.png)
 
 ## Цели проекта
 

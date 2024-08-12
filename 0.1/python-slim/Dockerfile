@@ -1,5 +1,6 @@
 FROM python:3.10.14-slim-bookworm
 ARG JINJA_HASH
+ARG JINJA_VER
 ARG JINJA_LINK=https://github.com/MrDave/StaticJinjaPlus/archive/refs/tags/$JINJA_VER.tar.gz
 WORKDIR /jinja
 ADD --checksum=sha256:$JINJA_HASH $JINJA_LINK /tmp/app.tar.gz
